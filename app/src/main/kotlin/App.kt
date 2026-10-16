@@ -1,111 +1,92 @@
 package org.example.app
 
-import org.example.utils.Printer
-import java.util.Locale
-import java.util.Locale.getDefault
-import java.util.stream.Collectors
-
-fun parseCountOrNull(text: String): Int?{
-    val trim_text: String = text.trim();
-    if (trim_text.isEmpty()) return null
-    else return  trim_text.toIntOrNull();
-}
-
-fun parseIntOrNull(text: String): Int?{
-    val trim_text: String = text.trim();
-    if (trim_text.isEmpty()) return null
-    else return  trim_text.toIntOrNull();
-}
-
-fun formatText(text: String, trimSpaces: Boolean = true, uppercase: Boolean = false, repeatCount: Int = 1, separator: Char = ' '): String{
-    var result = text;
-    if (trimSpaces)result = result.trim();
-    if (uppercase)result = result.uppercase(getDefault());
-
-    if(repeatCount > 0){
-        var local_res: String = result;
-        for(i in 0 until repeatCount){
-           local_res += separator +result;
-        }
-        result = local_res;
-    }
-
-    return result;
-
-}
 
 
 fun main() {
 
     //////////////////////////////////////////////
     /*
-    1.Вы делаете маленький модуль для склада: оператор вводит "сколько коробок приехало", но иногда он отправляет пустую строку
-    (не успел, передумал, нажал Enter), а иногда вводит мусор вроде ten.
-    Вам нужна функция parseCountOrNull(text: String): Int?, которая берёт строку, приводит её в порядок через trim(), и
-    дальше действует строго: если после trim() пусто — это “значение отсутствует”, то есть null. Если строка не пустая — пробуем
-    распарсить число через toIntOrNull(). В main вы читаете ввод, вызываете эту функцию и показываете результат одной строкой,
-    чтобы сразу было понятно: получилось число или null.
-    */
-//    println("сколько коробок приехало ? : ");
-//    var input = readln();
-//    val result: String = parseCountOrNull(input).toString()
-//    println("приехало : $result");
+    1.Вы делаете мини-форму для кастинга: программа читает три "заявки" с именами. Но люди иногда вводят пробелы или вообще жмут Enter,
+    ничего не написав — такие пустые заявки добавлять в список нельзя.
+
+    Создайте пустой MutableList<String> для имён. Прочитайте 3 строки, каждую обработайте через trim().
+    Если после trim() строка пустая — пропустите её. Всё непустое добавляйте через add(...). Потом прочитайте ещё одну строку — имя для
+    поиска (тоже trim()), и выведите FOUND, если имя есть в списке, иначе NOT FOUND.
+   */
+
+//    val names: MutableList<String> = mutableListOf();
+//    var input: String?;
+//    for (i in 1..3) {
+//        println("Input name :")
+//        input = readln().trim();
+//        if (input == null || input.isEmpty()) {
+//            continue;
+//        }
+//        else{
+//            names.add(input);
+//        }
+//
+//    }
+//    println(names);
+//    println("Find name :")
+//    input = readln().trim();
+//    if(input in names){
+//        println("FOUND");
+//    }
+//    else{
+//        println("NOT FOUND");
+//    }
 
     //////////////////////////////////////////////
     /*
-    2.Вы помогаете музею настроить терминал продажи билетов. Посетитель вводит возраст, а программа должна либо назвать цену,
-    либо остановить операцию и объяснить ошибку (если возраст не распознан или оказался отрицательным).
-    Программа читает строку возраста, делает trim() и парсит через toIntOrNull(). Если возраст не распарсился, нужно вывести ошибку и
-    сразу выйти из main (никаких дальнейших сравнений). Если распарсился — выбрать нужную ветку через if / else if / else по диапазонам и
-    вывести ровно одну строку результата.
-    */
-//    println("возраст ? : ");
-//    var input = readln();
-//    val result:Int? = parseCountOrNull(input);
-//    if(result == null){
-//        println("возраст не распознан");
-//        return;
-//    }
-//    else if(result < 0){
-//        println("возраст оказался отрицательным");
-//        return;
-//    }
-//    else if(result in 0..10){
-//        println("Цена 10$");
-//    }
-//    else if(result in 11..21){
-//        println("Цена 20$");
-//    }
-//    else if(result in 22..200){
-//        println("Цена 30$");
-//    }
+    2.Вы отвечаете за вход на мероприятие. Гости подходят один за другим и называют имя. Иногда кто-то пытается зарегистрироваться
+    повторно — и вам нужно это сразу заметить. Множество подходит идеально: в нём один и тот же текст не хранится дважды.
 
+    Сначала прочитайте число guestRequests. Затем guestRequests раз считайте имя и попробуйте добавить его в MutableSet<String>.
+    Если add(name) вернул true, выведите REGISTERED, иначе — DUPLICATE. В конце выведите TOTAL: X, где X — количество уникальных гостей.
+   */
+
+
+//    println("Количество : ");
+//    val guestRequests = readln().toIntOrNull() ?: return;
+//    var input: String?;
+//    val names: MutableSet<String> = mutableSetOf();
+//    for (i in 1..guestRequests) {
+//        println("Input name :");
+//        input = readln().trim();
+//        if(names.add(input)){
+//            println("REGISTERED");
+//        }
+//        else{
+//            println("DUPLICATE");
+//        }
+//    }
+//    println(names);
+//    val total:Int = names.size;
+//    println("TOTAL: $total");
 
 
     //////////////////////////////////////////////
     /*
-    3.Вы делаете маленький «генератор текста» для консольного чат-бота. Иногда текст нужно подчистить от пробелов по краям, иногда — крикнуть
-    капсом, а иногда — повторить фразу несколько раз через разделитель (например, чтобы сделать декоративную строку).
-    Напишите функцию
-    formatText(text: String, trimSpaces: Boolean = true, uppercase: Boolean = false, repeatCount: Int = 1, separator: Char = ' '): String.
-    Функция должна:
-    при trimSpaces = true убрать пробелы по краям,
-    при uppercase = true перевести строку в верхний регистр,
-    склеить repeatCount копий строки через separator.
-    В main нужно вывести результаты четырёх вызовов: только с обязательным text; с изменённым только separator; с изменённым только repeatCount;
-    с изменёнными uppercase и separator при неизменном trimSpaces. Вызовы должны демонстрировать именованные аргументы и пропуск части
-    параметров с дефолтами.
+    3.Вы собираете заказ из двух фруктов в онлайн-магазине. Покупатель вводит два названия, а ваша программа должна быстро
+    посчитать сумму. Но есть нюанс: если человек ошибся в названии или такого фрукта нет в прайсе, цена считается 0,
+    чтобы программа не падала и не усложняла жизнь кассиру.
+
+    В коде задана карта prices типа Map<String, Int> с товарами "apple" → 70, "banana" → 55, "orange" → 80.
+    Прочитайте firstItemName и secondItemName, получите цены через prices[name] (это Int?), замените null на 0 через Elvis ?:, и
+    выведите сумму одной строкой.
     */
+//    val prices:Map<String, Int> = mapOf("apple" to 70, "banana" to 55, "orange" to 80);
+//
+//    print("First item name is :");
+//    val firstItemName: String = readln().trim();
+//    print("Second item name is :");
+//    val secondItemName: String = readln().trim();
+//
+//    val first_price: Int = prices[firstItemName] ?:  0
+//    val second_price: Int = prices[secondItemName] ?: 0
+//
+//    println("Result : " + (first_price + second_price));
 
-    val res_1:String = formatText("Hello_World");
-    println(res_1);
 
-    val res_2:String = formatText("Hello_World",separator = '+');
-    println(res_2);
-
-    val res_3:String = formatText("Hello_World", repeatCount = 3);
-    println(res_3);
-
-    val res_4:String = formatText("Hello_World",uppercase = true, separator = '-');
-    println(res_4);
 }
