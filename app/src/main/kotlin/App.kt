@@ -1,88 +1,51 @@
 package org.example.app
 
-import org.example.app.task_1.Book
-import org.example.app.task_2.BankAccount
-import org.example.app.task_3.User
-import org.example.app.task_4.Product
+import org.example.app.task_1.DisplayName
+import org.example.app.task_2.Greeter
 
 
 fun main() {
 
     //////////////////////////////////////////////
     /*
-    1.Создай класс Book со свойствами title, author и pages (через основной конструктор) и методом describe(), который печатает:
-«Мастер и Маргарита», Михаил Булгаков, 480 стр.
-В main создай три книги и вызови describe() у каждой.
+    1.Вы делаете экран профиля в приложении, и там есть поле "Отображаемое имя". Пользователь может ввести что угодно — даже строку
+    из одних пробелов. В интерфейсе такое имя выглядит странно, поэтому вы решаете: пробелы по краям надо убирать, а если после
+    очистки ничего не осталось — показывать безопасное значение "Unknown".
+
+    Реализуйте класс DisplayName со свойством name: String. При каждом присваивании в name значение должно нормализоваться в
+    setter: примените trim(), и если результат пустой — сохраните "Unknown". Внутри setter используйте field, чтобы не устроить рекурсию.
+
+    В main создайте объект DisplayName, присвойте name значение " Alice ", затем " ", и после каждого присваивания выведите name
+    отдельной строкой. Должны получиться две строки: сначала Alice, затем Unknown.
     */
 
-    val book1 = Book("book1","author1",10);
-    val book2 = Book("book2","author2",20);
-    val book3 = Book("book3","author3",30);
-    println(book1.describe());//<<book1>>, author1, 10 стр.
-    println(book2.describe());//<<book2>>, author2, 20 стр.
-    println(book3.describe());//<<book3>>, author3, 30 стр.
-
+    val alice = DisplayName();
+    alice.name = "        Alice"
+    println(alice.name);//Alice
+    alice.name = " ";
+    println(alice.name);//Unknown
 
     //////////////////////////////////////////////
     /*
-    2.Класс BankAccount со свойствами owner (val) и balance (var, начальное значение 0). Методы:
-deposit(amount: Int) пополняет счёт;
-withdraw(amount: Int) списывает деньги, но если на счёте не хватает, печатает «Недостаточно средств» и баланс не меняет;
-printBalance() печатает «Баланс Анны: 1500 руб.».
-В main покажи сценарий: пополнить, снять, попробовать снять больше, чем есть
-    */
-    val ownerAnna = BankAccount("Anna");
-    println(ownerAnna.printBalance());// Баланс Anna: 0 руб.
-    ownerAnna.deposit(1000);
-    println(ownerAnna.printBalance());// Баланс Anna: 1000 руб.
-    ownerAnna.withdraw(10000);
-    println(ownerAnna.printBalance());// «Недостаточно средств» //Баланс Anna: 1000 руб.
+    2.Вы делаете маленький “терминал приветствий”: объект создаётся сразу (например, при запуске приложения), но имя пользователя
+    становится известно только позже, когда он ввёл его в настройках. Временные значения вроде "UNKNOWN" вам не подходят — вы хотите
+    честно сказать: “имени ещё нет, но оно обязательно будет”.
 
+    Создайте класс Greeter без параметров конструктора. Внутри объявите lateinit var userName: String и метод init(name: String),
+    который сохраняет имя. Если name пустое или состоит из пробелов, метод должен остановиться через require(...) с понятным сообщением.
 
-
-    //////////////////////////////////////////////
-    /*
-    3.Объяви data class User(val id: Int, val name: String, val email: String) и:
-создай двух пользователей с одинаковыми данными и сравни их через == и через ===;
-выведи одного через println(user);
-сделай копию с другой почтой через copy() и выведи обоих;
-разложи пользователя на переменные: val (id, name, email) = user.
-    */
-    val user_1 = User(1, "user1", email = "user1");
-    val user_2 = User(1, "user1", email = "user1");
-    println(user_1 == user_2);//true
-    println(user_1 === user_2);//false
-    println(user_1);//User(id=1, name=user1, email=user1)
-    val user_3 = user_1.copy(email = "user3");
-    println(user_1 == user_3);//false
-    println(user_1 === user_3);//false
-    println(user_1);//User(id=1, name=user1, email=user1)
-    println(user_3);//User(id=1, name=user1, email=user3)
-    val(id,name,email) = user_1;
-    println("$id, $name, $email");//1, user1, user1
-
-    //////////////////////////////////////////////
-    /*
-    4.data class Product(val name: String, val price: Int, val quantity: Int).
-Создай три товара в listOf(...).
-Посчитай итоговую сумму заказа (price * quantity по каждому товару).
-Сделай копию самого дорогого товара с количеством, увеличенным на 1, через copy().
-Выведи список в консоль.
-
+    Добавьте метод greet(): String, который возвращает строку Hello, <имя>!. В main прочитайте имя, нормализуйте через trim(),
+    вызовите init(...) и выведите результат greet().
     */
 
-    val list_products: List<Product> = listOf(
-        Product("product1", 100, 10),
-        Product("product2", 200, 20) ,
-        Product("product3", 300, 30)
-    );
-    println(list_products);// [Product(name=product1, price=100, quantity=10), Product(name=product2, price=200, quantity=20), Product(name=product3, price=300, quantity=30)]
+    println("Enter your name:");
+    val name  = readln().trim();
 
-    for (product in list_products) {
-        println( "Итоговая сумма товара: "+  product.price*product.quantity);
-    }
-    val max_price_product: Product = list_products.maxBy { it.price };
+    val greter = Greeter();
+    greter.init(name);
+    println(greter.greet()); // при пустом показывает Exception in thread "main" java.lang.IllegalArgumentException: Name cannot be blank
 
-    val product_copy = max_price_product.copy(quantity = max_price_product.quantity+1);
-    println(product_copy);//Product(name=product3, price=300, quantity=31)
+
+
+
 }
